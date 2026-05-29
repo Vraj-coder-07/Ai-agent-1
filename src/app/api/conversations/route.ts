@@ -44,6 +44,10 @@ async function sendTelegramMessage(chat_id: number, text: string) {
   });
 }
 
+export async function GET() {
+  return Response.json({ status: "Telegram webhook active" });
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
@@ -121,12 +125,8 @@ export async function POST(request: NextRequest) {
 
     return Response.json({ status: "replied" });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.error("Webhook error:", message);
-    return Response.json({ status: "error", message }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Webhook error:", msg);
+    return Response.json({ status: "error", message: msg }, { status: 500 });
   }
-}
-
-export async function GET() {
-  return Response.json({ status: "Telegram webhook active" });
 }
